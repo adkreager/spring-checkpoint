@@ -1,9 +1,11 @@
 package com.example.demo;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +47,27 @@ public class Controller {
             }
         }
         return String.join(" ", splitString);
+    }
+
+    @PostMapping("/encode")
+    public String encodeString(@RequestParam("message") String message,
+                               @RequestParam("key") String key) {
+        String[] splitMessage = message.split(" ");
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        Map<String, String> encryptMap = new HashMap<>();
+
+        for (int i = 0; i < alphabet.length(); i++) {
+            encryptMap.put(Character.toString(alphabet.charAt(i)), Character.toString(key.charAt(i)));
+        }
+
+        for (int i = 0; i < splitMessage.length; i++) {
+            String[] splitWord = splitMessage[i].split("");
+            for (int j = 0; j < splitWord.length; j++) {
+                splitWord[j] = encryptMap.get(splitWord[j]);
+            }
+            splitMessage[i] = String.join("", splitWord);
+        }
+        return String.join(" ", splitMessage);
     }
 
 }
