@@ -1,9 +1,6 @@
 package com.example.demo;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -70,4 +67,10 @@ public class Controller {
         return String.join(" ", splitMessage);
     }
 
+    @PostMapping("/s/{find}/{replacement}")
+    public String replacedString(@PathVariable CharSequence find,
+                                 @PathVariable CharSequence replace,
+                                 @RequestBody String body) {
+        return body.replace(find, replace);
+    }
 }
