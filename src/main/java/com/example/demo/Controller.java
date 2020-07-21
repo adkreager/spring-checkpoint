@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class Controller {
 
@@ -22,6 +25,26 @@ public class Controller {
             output += splitString[i].substring(0,1).toUpperCase() + splitString[i].substring(1);
         }
         return output;
+    }
+
+    public String fixBadWords(int length) {
+        String output = "";
+        for (int i = 0; i < length; i++) {
+            output += "*";
+        }
+        return output;
+    }
+
+    @GetMapping("/redact")
+    public String redactString(@RequestParam("original") String original,
+                               @RequestParam(value = "badWord", required = false, defaultValue = "") List<String> badWord) {
+        String[] splitString = original.split(" ");
+        for (int i = 0; i < splitString.length; i++) {
+            if (badWord.contains(splitString[i])) {
+                splitString[i] = fixBadWords(splitString[i].length());
+            }
+        }
+        return String.join(" ", splitString);
     }
 
 }
